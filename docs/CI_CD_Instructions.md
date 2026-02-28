@@ -94,7 +94,11 @@ git push -u origin master
 
 ### 3.1. ملف `build.yml`
 
-يوجد ملف تعريف خط الأنابيب في `.github/workflows/build.yml`:
+**ملاحظة هامة**: نظرًا لقيود الأذونات، لا يمكنني دفع ملف سير عمل GitHub Actions مباشرة إلى مستودعك. ستحتاج إلى إضافة هذا الملف يدويًا إلى مستودعك على GitHub.
+
+1.  **إنشاء الدليل**: في مستودعك على GitHub، انتقل إلى مجلد الجذر وقم بإنشاء الدلائل التالية إذا لم تكن موجودة: `.github/workflows/`.
+2.  **إنشاء الملف**: داخل مجلد `workflows`، قم بإنشاء ملف جديد باسم `build.yml`.
+3.  **نسخ المحتوى**: انسخ المحتوى التالي والصقه في ملف `build.yml`:
 
 ```yaml
 name: Android CI
@@ -155,6 +159,8 @@ jobs:
     #     status: completed
 ```
 
+4.  **الالتزام بالتغييرات**: قم بالالتزام بالملف الجديد مباشرة على الفرع الرئيسي (main/master) أو من خلال طلب سحب (Pull Request).
+
 ### 3.2. شرح خطوات خط الأنابيب
 
 *   **`name: Android CI`**: اسم سير العمل.
@@ -167,4 +173,12 @@ jobs:
         *   **`Grant execute permission for gradlew`**: يمنح الإذن التنفيذي لملف `gradlew` (Gradle Wrapper) لتمكين تشغيل أوامر Gradle.
         *   **`Build with Gradle`**: يقوم بتشغيل أمر `build` الخاص بـ Gradle لبناء المشروع. سيؤدي هذا إلى تجميع الكود وإنشاء ملفات APK/AAB.
         *   **`Run Unit Tests`**: يقوم بتشغيل الاختبارات الوحدوية المعرفة في المشروع باستخدام أمر `test` الخاص بـ Gradle.
-        *   **`Upload a debug APK`**: يقوم بتحميل ملف `app-debug.apk` الناتج كـ 
+        *   **`Upload a debug APK`**: يقوم بتحميل ملف `app-debug.apk` الناتج كـ artifact، والذي يمكن تنزيله من صفحة GitHub Actions بعد اكتمال سير العمل بنجاح.
+
+**خطوات اختيارية للتوقيع والإصدار**: تتضمن التعليقات في ملف `build.yml` خطوات اختيارية لتوقيع حزمة التطبيق (AAB) وتحميلها إلى متجر Google Play. ستحتاج إلى تكوين أسرار GitHub (GitHub Secrets) لـ `KEYSTORE_BASE64` و `KEYSTORE_PASSWORD` و `KEY_KEY_PASSWORD` و `PLAY_STORE_UPLOAD_KEY` لاستخدام هذه الخطوات.
+
+## 4. المراجع
+
+[1] [GitHub Actions Documentation](https://docs.github.com/en/actions)
+[2] [Gradle Official Documentation](https://docs.gradle.org/current/userguide/userguide.html)
+[3] [Android Developers - Build your app](https://developer.android.com/build)
